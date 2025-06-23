@@ -1,0 +1,5 @@
+fastapi==0.104.1  # MIT License
+uvicorn==0.24.0  # MIT License
+PyMuPDF==1.26.1  # AGPL-3.0 License
+pydantic==2.9.2  # BSD-3-Clause License
+python-multipart==0.0.6  # MIT License
