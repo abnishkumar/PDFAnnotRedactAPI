@@ -98,7 +98,7 @@ def annotate_pdf_multi_text_underline(pdf_data: bytes, search_terms: List[Search
                 if term.redact:
                     if use_apply_redactions:
                         # Add redaction annotation to black out text
-                        redact_annot = page.add_redact_annot(quads=inst, fill=(0, 0, 0))  # Black fill
+                        redact_annot = page.add_redact_annot(quad=inst, fill=(0, 0, 0))  # Black fill
                         redact_annot.update()
                         has_redactions = True
                     else:
