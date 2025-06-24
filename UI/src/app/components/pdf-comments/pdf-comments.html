@@ -1,0 +1,10 @@
+<div class="p-2">
+  <h3 class="h5 fw-bold">Comments</h3>
+  <textarea [(ngModel)]="comment" class="form-control mb-2" rows="4" placeholder="Add a comment..."></textarea>
+  <button (click)="addComment()" class="btn btn-success mb-3">Add Comment</button>
+  <ul class="list-group">
+    <li *ngFor="let comment of comments" class="list-group-item">
+      {{ comment.content }}
+    </li>
+  </ul>
+</div>

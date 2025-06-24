@@ -1,0 +1,35 @@
+<div class="container-fluid bg-light min-vh-100">
+  <div class="row">
+    <div class="col-md-9 p-4">
+      <app-pdf-toolbar
+        (toolSelected)="selectedTool = $event"
+        (save)="savePdf()"
+      ></app-pdf-toolbar>
+      <input type="file" accept="application/pdf" (change)="onFileSelected($event)" class="form-control mb-3">
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <div #pdfViewer class="position-relative" (click)="onRedactionArea($event)" *ngIf="pdfSrc">
+        <ngx-extended-pdf-viewer
+          [src]="pdfSrc"
+          [showHandToolButton]="true"
+          [showDrawEditor]="true"
+          [showTextEditor]="true"
+          [zoom]="'auto'"
+          height="600px"
+          (onPageChange)="onPageChange($event)"
+        ></ngx-extended-pdf-viewer>
+        <div
+          *ngFor="let redaction of redactions | filterByPage: currentPage"
+          class="position-absolute bg-dark"
+          [style.left.px]="redaction.coordinates.x"
+          [style.top.px]="redaction.coordinates.y-10"
+          [style.width.px]="redaction.coordinates.width"
+          [style.height.px]="redaction.coordinates.height"
+        ></div>
+      </div>
+      <div *ngIf="!pdfSrc" class="alert alert-info">Please upload a PDF to view.</div>
+    </div>
+    <div class="col-md-3 p-4 border-start bg-white">
+      <app-pdf-comments></app-pdf-comments>
+    </div>
+  </div>
+</div>
