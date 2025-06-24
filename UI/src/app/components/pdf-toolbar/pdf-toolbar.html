@@ -1,5 +1,5 @@
-<div class="d-flex gap-2 p-2 bg-secondary">
-  <button (click)="selectTool('redact')" class="btn btn-dark">Redact</button>
-  <button (click)="selectTool(null)" class="btn btn-outline-secondary">None</button>
-  <button (click)="savePdf()" class="btn btn-success">Save PDF</button>
+<div class="btn-group mb-3" role="group">
+  <button type="button" class="btn btn-primary" (click)="selectRedactTool()">Redact</button>
+  <button type="button" class="btn btn-secondary" (click)="clearTool()">Clear Tool</button>
+  <button type="button" class="btn btn-success" (click)="savePdf()" [disabled]="!hasPdf">Save PDF</button>
 </div>
