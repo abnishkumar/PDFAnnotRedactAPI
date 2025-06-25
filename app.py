@@ -63,77 +63,48 @@ def annotate_pdf_multi_text_underline(pdf_data: bytes, search_terms: List[Search
     """
     Annotate a PDF by fully redacting text (black out) if redact is True, or underlining with colors
     (default black) and adding hoverable comments without icons (30px height) if redact is False.
-    Use apply_redactions if available; otherwise, draw black rectangles for redaction.
-    
-    Args:
-        pdf_data: Bytes of the input PDF.
-        search_terms: List of SearchTerm objects with text, optional color, optional comment, and redact flag.
-    
-    Returns:
-        Bytes of the annotated PDF.
+    Applies redactions at the page level for PyMuPDF 1.26.1.
     """
     logger.debug("Annotating PDF with search terms: %s", [term.dict() for term in search_terms])
-    # Open the PDF from bytes
+    
     doc = fitz.open(stream=pdf_data, filetype="pdf")
-    
-    # Track whether any redaction annotations were added
-    has_redactions = False
-    # Check if apply_redactions is available
-    use_apply_redactions = hasattr(doc, "apply_redactions")
-    logger.debug("Using apply_redactions: %s", use_apply_redactions)
-    
-    # Iterate through each page
+
     for page in doc:
-        # Process each search term
+        has_redactions = False  # Track redactions for the current page
         for term in search_terms:
-            # Search for the text on the page (case-sensitive)
             text_instances = page.search_for(term.text)
             logger.debug("Found %d instances of '%s' on page %d", len(text_instances), term.text, page.number)
             
-            # Process each found instance
             for inst in text_instances:
-                # Calculate coordinates
-                x0, y0, x1, y1 = inst
-                
                 if term.redact:
-                    if use_apply_redactions:
-                        # Add redaction annotation to black out text
-                        redact_annot = page.add_redact_annot(quad=inst, fill=(0, 0, 0))  # Black fill
-                        redact_annot.update()
-                        has_redactions = True
-                    else:
-                        # Fallback: Draw a black rectangle to obscure text
-                        page.draw_rect(inst, color=(0, 0, 0), fill=(0, 0, 0), overlay=True)
-                        has_redactions = True
+                    rect = fitz.Rect(inst)
+                    page.add_redact_annot(rect, fill=(0, 0, 0))
+                    has_redactions = True
                 else:
-                    # Add underline for non-redacted text
-                    underline_y = y1 + 2  # Offset below text
-                    points = [(x0, underline_y), (x1, underline_y)]
-                    page.draw_line(points[0], points[1], color=term.color, width=1)
+                    x0, y0, x1, y1 = inst
+                    underline_y = y1 + 2
+                    page.draw_line((x0, underline_y), (x1, underline_y), color=term.color, width=1)
                     
-                    # Add a highlight annotation with comment if provided
                     if term.comment:
-                        # Adjust the highlight rectangle to have a height of ~30 pixels
-                        highlight_rect = fitz.Rect(x0, y0, x1, y0 + 30)  # Set height to 30 pixels
-                        annot = page.add_highlight_annot(quads=highlight_rect)
-                        # Set highlight to transparent to focus on underline
+                        highlight_rect = fitz.Rect(x0, y0, x1, y0 + 30)
+                        annot = page.add_highlight_annot(highlight_rect)
                         annot.set_opacity(0.0)
-                        # Add comment to the annotation
                         annot.set_info(content=term.comment)
-                        # Match annotation color to underline
                         annot.set_colors(stroke=term.color)
                         annot.update()
-    
-    # Apply redactions only if at least one redaction annotation was added and method is available
-    if has_redactions and use_apply_redactions:
-        doc.apply_redactions()
-    
-    # Save the annotated PDF to a bytes buffer
+
+        # Apply redactions for the current page
+        if has_redactions:
+            logger.debug("Applying redactions on page %d", page.number)
+            page.apply_redactions()
+
     output_buffer = io.BytesIO()
-    doc.save(output_buffer, garbage=4, deflate=True)
+    doc.save(output_buffer, garbage=4, deflate=True, clean=True)
     doc.close()
     output_buffer.seek(0)
     return output_buffer.read()
+
+
 
 @app.post("/annotate-pdf/", response_class=StreamingResponse, dependencies=[Depends(get_api_key)])
 async def annotate_pdf(
