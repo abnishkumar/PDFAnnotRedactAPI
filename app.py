@@ -1,10 +1,11 @@
 import logging
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, status, Form
 from fastapi.security import APIKeyHeader
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 import fitz  # PyMuPDF
 from pydantic import BaseModel, field_validator
 from typing import List, Tuple, Optional
+from fastapi.middleware.cors import CORSMiddleware
 import io
 import os
 import json
@@ -15,6 +16,14 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="PDF Text Annotation API")
+# Enable CORS for local development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # API Key configuration
 API_KEY = os.getenv("API_KEY")
@@ -157,6 +166,16 @@ async def annotate_pdf(
     except Exception as e:
         logger.error("Error processing PDF: %s", str(e))
         raise HTTPException(status_code=500, detail=f"Error processing PDF: {str(e)}")
+
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    content = await file.read()
+    return JSONResponse({
+        "filename": file.filename,
+        "content_type": file.content_type,
+        "size": len(content),
+        "message": "File uploaded successfully"
+    })
 
 if __name__ == "__main__":
     import uvicorn

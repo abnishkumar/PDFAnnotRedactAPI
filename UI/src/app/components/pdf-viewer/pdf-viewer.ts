@@ -8,11 +8,16 @@ import { PdfComments } from '../pdf-comments/pdf-comments';
 import { FilterByPagePipe } from '../filter-by-page.pipe';
 import { Redaction } from '../../models/redaction.model';
 import { PdfService } from '../../services/pdf.service';
+import { RedactorComponent } from '../redactor/redactor.component';
 
 @Component({
   selector: 'app-pdf-viewer',
   standalone: true,
-  imports: [CommonModule, NgxExtendedPdfViewerModule, PdfToolbar, PdfComments, FilterByPagePipe],
+  imports: [CommonModule, NgxExtendedPdfViewerModule,
+    PdfToolbar,
+    PdfComments,
+    RedactorComponent,
+    FilterByPagePipe],
   templateUrl: './pdf-viewer.html',
   styleUrls: ['./pdf-viewer.css']
 })
@@ -25,7 +30,7 @@ export class PdfViewer implements OnInit, OnDestroy {
   currentPage = 1;
   private subscriptions = new Subscription();
 
-  constructor(private pdfService: PdfService) {}
+  constructor(private pdfService: PdfService) { }
 
   ngOnInit() {
     this.subscriptions.add(
