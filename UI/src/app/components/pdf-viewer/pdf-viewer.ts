@@ -8,7 +8,6 @@ import { PdfComments } from '../pdf-comments/pdf-comments';
 import { FilterByPagePipe } from '../filter-by-page.pipe';
 import { Redaction } from '../../models/redaction.model';
 import { PdfService } from '../../services/pdf.service';
-import { RedactorComponent } from '../redactor/redactor.component';
 
 @Component({
   selector: 'app-pdf-viewer',
@@ -16,7 +15,7 @@ import { RedactorComponent } from '../redactor/redactor.component';
   imports: [CommonModule, NgxExtendedPdfViewerModule,
     PdfToolbar,
     PdfComments,
-    RedactorComponent,
+    // RedactorComponent,
     FilterByPagePipe],
   templateUrl: './pdf-viewer.html',
   styleUrls: ['./pdf-viewer.css']
@@ -88,7 +87,10 @@ export class PdfViewer implements OnInit, OnDestroy {
     }
     try {
       const pdfBytes = await this.pdfService.savePdf();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const uint8Array: any = pdfBytes instanceof Uint8Array
+        ? pdfBytes
+        : new Uint8Array(pdfBytes);
+      const blob = new Blob([uint8Array], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
