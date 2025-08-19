@@ -1,37 +1,51 @@
-<h2 style="text-align:center;">PDF File Redactor</h2>
-<div [style.min-height]="'50px'">
-<div class="pdf-buttons" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'">
-  <button id="pdf-prev" (click)="prevPage()">Previous</button>
-  <button id="pdf-next" (click)="nextPage()">Next</button>
+<div [style.mim-height]="'50px'" style="margin-top: 10px; text-align: center;">
+  <div class="pdf-buttons" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'" style="margin-bottom: 15px;">
+    <button id="pdf-prev" (click)="prevPage()" class="pdf-button">Previous</button>
+    <button id="pdf-next" (click)="nextPage()" class="pdf-button">Next</button>
+  </div>
+
+  <button id="download-image" (click)="downloadFile()"
+          [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'"
+          [disabled]="show && __TOTAL_PAGES!=allPages.length"
+          class="pdf-button" style="margin-top: 10px;">
+    Download PDF
+  </button>
 </div>
-<button id="download-image" (click)="downloadFile()"
-        [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'" [disabled]="show && __TOTAL_PAGES!=allPages.length">Download PDF
-</button>
+
+<div style="text-align: center; margin-top: 20px;">
+  <app-drop-zone (fileEvent)="captureFile($event)" (removeFileEvent)="removeFile($event)"
+                 style="margin-top: 15px;"></app-drop-zone>
 </div>
-<div style="text-align: center;">
-  <!-- <button id="upload-button" (click)="uploadFile()" [style.display]="'none'">Select PDF</button> -->
-  <app-drop-zone (fileEvent)="captureFile($event)" (removeFileEvent)="removeFile($event)" ></app-drop-zone>
-</div>
-<div id="pdf-main-container" (mousedown)="mouse.event($event)"
-     (mouseup)="mouse.event($event)" (mousemove)="mouse.event($event)">
-  <div id="pdf-contents">
-    <div id="pdf-loader" [style.display]="show && __TOTAL_PAGES!=allPages.length?'block':'none'">Loading document ...</div>
-    <div id="pdf-meta">
+
+<div id="pdf-main-container"  (mousedown)="mouse.event($event)" (mouseup)="mouse.event($event)" (mousemove)="mouse.event($event)">
+  <div id="pdf-contents" style="margin-top: 20px; position: relative;">
+    <div id="pdf-loader" [style.display]="show && __TOTAL_PAGES!=allPages.length?'block':'none'"
+         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; color: #555;">
+      Loading document ...
+    </div>
+
+    <div id="pdf-meta" style="position: absolute; top: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px;">
       <div class="pdf-buttons" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'">
-        <button id="pdf-undo" (click)="undoAction()">Undo</button>
-        <button id="pdf-redo" (click)="redoAction()">Redo</button>
-        <label for="fill-color">&nbsp;&nbsp;&nbsp;Fill Color:</label>
-        <input type="color" id="fill-color" name="fill-color" [(ngModel)]="this.fillColor" />
+        <button id="pdf-undo" (click)="undoAction()" class="pdf-button">Undo</button>
+        <button id="pdf-redo" (click)="redoAction()" class="pdf-button">Redo</button>
+
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 16px; color: #333;">
+          <label for="fill-color" style="font-size: 16px; font-weight: bold; color: #333; margin-right: 10px;">Fill Color:</label>
+          <input type="color" id="fill-color" name="fill-color" [(ngModel)]="this.fillColor"
+                 style="border: 2px solid #ccc; padding: 4px; border-radius: 4px; cursor: pointer;"/>
+        </div>
       </div>
-      <div id="page-count-container" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'">
+
+      <div id="page-count-container" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'" style="font-size: 16px; color: #333;">
         <div id="pdf-current-page"></div>
-        Page {{__CURRENT_PAGE}}
-        <div id="pdf-total-pages"></div>
-        of {{__TOTAL_PAGES}}
+        Page {{__CURRENT_PAGE}} of {{__TOTAL_PAGES}}
       </div>
     </div>
-    <div id="canvas-container" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'">
-      <canvas #myCanvas>
-      </canvas></div>
+
+    <div id="canvas-container" style="max-width: 70%;" [style.display]="show && __TOTAL_PAGES==allPages.length?'block':'none'"
+         style="text-align: center; margin-top: 20px;">
+      <canvas #myCanvas style="border: 1px solid #ccc; background-color: #f9f9f9;"></canvas>
+    </div>
   </div>
 </div>
+

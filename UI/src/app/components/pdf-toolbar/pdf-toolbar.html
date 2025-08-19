@@ -1,6 +1,10 @@
-<div class="btn-group mb-3" role="group">
-  <button type="button" class="btn btn-primary" (click)="selectdTool('redact')">Redact</button>
-  <button type="button" class="btn btn-secondary" (click)="selectdTool('annotate')">Annotate</button>
-  <!-- <button type="button" class="btn btn-secondary" (click)="clearTool()">Clear Tool</button> -->
-  <!-- <button type="button" class="btn btn-success" (click)="savePdf()" [disabled]="!hasPdf">Save PDF</button> -->
+<div class="form-group mb-3" style="text-align: left;">
+  <!-- Select Dropdown -->
+  <label for="toolSelector" class="form-label">Select Tool</label>
+  <select id="toolSelector" class="form-select" [(ngModel)]="selectedTool" (ngModelChange)="onToolSelected($event)">
+    <option value="redact">Redact</option>
+    <option value="annotate">Annotate</option>
+    <!-- <option value="clear">Clear Tool</option> -->
+    <!-- <option value="save">Save PDF</option> -->
+  </select>
 </div>

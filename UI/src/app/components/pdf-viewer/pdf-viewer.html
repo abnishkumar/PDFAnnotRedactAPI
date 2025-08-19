@@ -1,27 +1,60 @@
 <div class="container-fluid bg-light min-vh-100">
   <div class="row">
-    <app-pdf-toolbar (toolSelected)="selectedTool = $event"></app-pdf-toolbar>
+    <app-pdf-toolbar (toolSelected)="selectedTool = $event" class="mb-3"></app-pdf-toolbar>
   </div>
-  <div  class="row">
-    <div [hidden]="selectedTool !== 'redact'"class="col-md-9 p-4">
-      <app-redactor></app-redactor>
-    </div>
-    <div [hidden]="selectedTool !== 'annotate'" class="col-md-9 p-4">
-      <input type="file" accept="application/pdf" (change)="onFileSelected($event)" class="form-control mb-3">
-      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-      <div #pdfViewer class="position-relative"  *ngIf="pdfSrc">
-        <ngx-extended-pdf-viewer [src]="pdfSrc" [showHandToolButton]="true" [showDrawEditor]="true"
-          [showTextEditor]="true" [zoom]="'auto'" height="600px"
-          (onPageChange)="onPageChange($event)"></ngx-extended-pdf-viewer>
-        <div *ngFor="let redaction of redactions | filterByPage: currentPage" class="position-absolute bg-dark"
-          [style.left.px]="redaction.coordinates.x" [style.top.px]="redaction.coordinates.y-10"
-          [style.width.px]="redaction.coordinates.width" [style.height.px]="redaction.coordinates.height"></div>
+  <div class="row">
+    <!-- Redact Tool Section -->
+    <div [hidden]="selectedTool !== 'redact'" class="col-md-9 p-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <app-redactor></app-redactor>
+        </div>
       </div>
-      <div *ngIf="!pdfSrc" class="alert alert-info">Please upload a PDF to view.</div>
     </div>
 
+    <!-- Annotate Tool Section -->
+    <div [hidden]="selectedTool !== 'annotate'" class="col-md-9 p-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <input type="file" accept="application/pdf" (change)="onFileSelected($event)" class="form-control mb-3 border-0 rounded-pill shadow-sm">
+          
+          <div *ngIf="error" class="alert alert-danger mb-3" role="alert">
+            {{ error }}
+          </div>
+
+          <div #pdfViewer class="position-relative" *ngIf="pdfSrc">
+            <ngx-extended-pdf-viewer 
+              [src]="pdfSrc" 
+              [showHandToolButton]="true" 
+              [showDrawEditor]="true" 
+              [showTextEditor]="true" 
+              [zoom]="'auto'" 
+              height="600px"
+              (onPageChange)="onPageChange($event)">
+            </ngx-extended-pdf-viewer>
+
+            <!-- Redactions Overlay -->
+            <div *ngFor="let redaction of redactions | filterByPage: currentPage" class="position-absolute bg-dark"
+              [style.left.px]="redaction.coordinates.x" 
+              [style.top.px]="redaction.coordinates.y - 10"
+              [style.width.px]="redaction.coordinates.width" 
+              [style.height.px]="redaction.coordinates.height"></div>
+          </div>
+
+          <div *ngIf="!pdfSrc" class="alert alert-info mt-3" role="alert">
+            Please upload a PDF to view.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
     <div class="col-md-3 p-4 border-start bg-white">
-      <app-pdf-comments></app-pdf-comments>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <app-pdf-comments></app-pdf-comments>
+        </div>
+      </div>
     </div>
   </div>
 </div>

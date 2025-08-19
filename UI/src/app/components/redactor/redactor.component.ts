@@ -344,7 +344,7 @@ export class RedactorComponent implements AfterViewInit {
     const that = this;
     for (let i = 1; i <= this.__TOTAL_PAGES; i++) {
       this.__PDF_DOC.getPage(i).then(function (page: any) {
-        const width = window.screen.availWidth - 50;
+        const width = window.screen.availWidth - 150;
         const scale_required = width / page.getViewport({ scale: 1 }).width;
         const viewport = page.getViewport({ scale: scale_required });
         const canv = document.createElement('canvas');

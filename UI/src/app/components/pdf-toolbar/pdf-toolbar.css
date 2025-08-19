@@ -1,0 +1,50 @@
+.form-group {
+    max-width: 350px;  /* Limit max width of the container */
+    margin: 20px auto;  /* Center the container */
+  }
+
+  /* Label Styling */
+  .form-label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  /* Select Dropdown Styling */
+  .form-select {
+    display: block;
+    width: 100%;  /* Full width of the container */
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 8px;  /* Rounded corners */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Select Focus Styling */
+  .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
+  }
+
+  /* Option Styling */
+  .form-select option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+  }
+
+  /* Hover effect for select (optional) */
+  .form-select:hover {
+    border-color: #007bff;
+  }
+
+  /* Disabled option styling */
+  .form-select option:disabled {
+    color: #aaa;
+    background-color: #f0f0f0;
+  }

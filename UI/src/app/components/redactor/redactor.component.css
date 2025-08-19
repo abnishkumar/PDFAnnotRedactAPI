@@ -1,71 +1,73 @@
-#upload-button {
-  width: 150px;
-  display: block;
-  margin: 20px 45%;
-}
-
-#file-to-upload {
-
-}
-
-#pdf-main-container {
-  margin: 20px auto;
-}
-
-#pdf-loader {
-
-  text-align: center;
-  color: #999999;
-  font-size: 13px;
-  line-height: 100px;
-}
-
-#pdf-contents {
-
-}
-
-#pdf-meta {
-  overflow: hidden;
-  margin: 0 0 20px 0;
-}
-
 .pdf-buttons {
-  float: left;
-}
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
 
-#page-count-container {
-  float: right;
-}
+  .pdf-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
 
-#pdf-current-page {
-  display: inline;
-}
+  .pdf-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 
-#pdf-total-pages {
-  display: inline;
-}
+  .pdf-button:hover {
+    background-color: #0056b3;
+  }
 
-#canvas-container{
-  width: 100%;
-  text-align: center;
-  margin: auto;
-}
 
-canvas {
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-}
+  .pdf-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+  }
 
-#page-loader {
-  height: 100px;
-  line-height: 100px;
-  text-align: center;
-  color: #999999;
-  font-size: 13px;
-}
+  #pdf-loader {
+    font-size: 18px;
+    color: #555;
+  }
 
-#download-image {
-  width: 150px;
-  text-align: center;
-  float:right;
-}
+  #pdf-current-page {
+    font-weight: bold;
+  }
+
+  #page-count-container {
+    font-size: 16px;
+    color: #333;
+  }
+
+  #pdf-total-pages {
+    font-size: 16px;
+  }
+
+  /* Improved Fill Color Input Styling */
+  input[type="color"] {
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type="color"]:focus {
+    border-color: #007BFF;
+    outline: none;
+  }
+
+
+
+ 
