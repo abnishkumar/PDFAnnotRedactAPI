@@ -8,6 +8,7 @@ import { PdfComments } from '../pdf-comments/pdf-comments';
 import { FilterByPagePipe } from '../filter-by-page.pipe';
 import { Redaction } from '../../models/redaction.model';
 import { PdfService } from '../../services/pdf.service';
+import { RedactorComponent } from '../redactor/redactor.component';
 
 @Component({
   selector: 'app-pdf-viewer',
@@ -15,7 +16,7 @@ import { PdfService } from '../../services/pdf.service';
   imports: [CommonModule, NgxExtendedPdfViewerModule,
     PdfToolbar,
     PdfComments,
-    // RedactorComponent,
+    RedactorComponent,
     FilterByPagePipe],
   templateUrl: './pdf-viewer.html',
   styleUrls: ['./pdf-viewer.css']
@@ -25,7 +26,7 @@ export class PdfViewer implements OnInit, OnDestroy {
   pdfSrc: ArrayBuffer | null = null;
   redactions: Redaction[] = [];
   error: string | null = null;
-  selectedTool: 'redact' | null = null;
+  selectedTool: 'redact' | 'annotate' = 'annotate';
   currentPage = 1;
   private subscriptions = new Subscription();
 
@@ -64,20 +65,6 @@ export class PdfViewer implements OnInit, OnDestroy {
 
   onPageChange(page: any) {
     this.currentPage = Number(page);
-  }
-
-  onRedactionArea(event: MouseEvent) {
-    if (this.selectedTool !== 'redact') return;
-    const rect = this.pdfViewer.nativeElement.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const redaction: Redaction = {
-      id: Math.random().toString(36).substr(2, 9),
-      page: this.currentPage,
-      coordinates: { x, y, width: 100, height: 20 }
-    };
-    this.pdfService.addRedaction(redaction);
   }
 
   async savePdf() {

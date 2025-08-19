@@ -9,7 +9,7 @@
 </button>
 </div>
 <div style="text-align: center;">
-  <button id="upload-button" (click)="uploadFile()" [style.display]="'none'">Select PDF</button>
+  <!-- <button id="upload-button" (click)="uploadFile()" [style.display]="'none'">Select PDF</button> -->
   <app-drop-zone (fileEvent)="captureFile($event)" (removeFileEvent)="removeFile($event)" ></app-drop-zone>
 </div>
 <div id="pdf-main-container" (mousedown)="mouse.event($event)"

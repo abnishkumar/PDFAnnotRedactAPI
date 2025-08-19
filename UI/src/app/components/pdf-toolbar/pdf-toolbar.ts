@@ -9,17 +9,22 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./pdf-toolbar.css']
 })
 export class PdfToolbar {
- @Input() hasPdf: boolean = false;
-  @Output() toolSelected = new EventEmitter<'redact' | null>();
+  @Input() hasPdf: boolean = false;
+  @Output() toolSelected = new EventEmitter<'redact' | 'annotate'>();
   @Output() save = new EventEmitter<void>();
 
-  selectRedactTool() {
-    this.toolSelected.emit('redact');
+  ngOnInit() { 
+    this.toolSelected.emit('annotate');
   }
 
-  clearTool() {
-    this.toolSelected.emit(null);
+  selectdTool(tool: 'redact' | 'annotate') {
+    console.log('Selected tool:', tool);
+    this.toolSelected.emit(tool);
   }
+
+  // clearTool() {
+  //   this.toolSelected.emit();
+  // }
 
   savePdf() {
     this.save.emit();

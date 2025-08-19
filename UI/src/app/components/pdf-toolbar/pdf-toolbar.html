@@ -1,5 +1,6 @@
 <div class="btn-group mb-3" role="group">
-  <button type="button" class="btn btn-primary" (click)="selectRedactTool()">Redact</button>
-  <button type="button" class="btn btn-secondary" (click)="clearTool()">Clear Tool</button>
-  <button type="button" class="btn btn-success" (click)="savePdf()" [disabled]="!hasPdf">Save PDF</button>
+  <button type="button" class="btn btn-primary" (click)="selectdTool('redact')">Redact</button>
+  <button type="button" class="btn btn-secondary" (click)="selectdTool('annotate')">Annotate</button>
+  <!-- <button type="button" class="btn btn-secondary" (click)="clearTool()">Clear Tool</button> -->
+  <!-- <button type="button" class="btn btn-success" (click)="savePdf()" [disabled]="!hasPdf">Save PDF</button> -->
 </div>
